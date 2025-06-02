@@ -28,6 +28,60 @@
         }
       }
     },
-    {}
+    {},
+    {
+      "username": "greg",
+      "passwordHash": "$2b$10$Ur.kTBjeUlktl43aLf499.BAW2mB2NwXdNBAJErkWZGfn4cHfWabi",
+      "characterSheet": {
+        "nom": "Greg",
+        "race": "Humain",
+        "classe": "Voleur",
+        "age": 33,
+        "corps": 8,
+        "intellect": 8,
+        "agilité": 8,
+        "sociale": 8,
+        "corps-sous-comp": {
+          "intimidation": 8,
+          "sang froid": 8,
+          "resistance": 8,
+          "robustesse": 8,
+          "mêlée lourde": 8,
+          "combat main nues": 8,
+          "réflexe": 8,
+          "combat à distance": 8
+        },
+        "intellect-sous-comp": {
+          "intuition": 8,
+          "stratégie": 8,
+          "navigation": 8,
+          "perception": 8,
+          "craft": 8,
+          "alchimie": 8,
+          "mythologie/savoir": 8,
+          "magie": 8
+        },
+        "agilité-sous-comp": {
+          "combat à distance léger": 8,
+          "discrétion": 8,
+          "esquive": 8,
+          "dance/mouvements": 8,
+          "escalade": 8,
+          "mêlée légères": 8,
+          "crochetage": 8,
+          "voler": 8
+        },
+        "sociale-sous-comp": {
+          "éloquence/mensonge": 8,
+          "persuasion": 8,
+          "charisme": 8,
+          "humour": 8,
+          "séduction": 8,
+          "lire/écrire": 8,
+          "animaux": 8,
+          "médical": 8
+        }
+      }
+    }
   ]
 }
