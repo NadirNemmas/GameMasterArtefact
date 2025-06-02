@@ -1,0 +1,33 @@
+{
+  "users": [
+    {
+      "username": "vargros",
+      "passwordHash": "$2b$10$DpYBHt3FEcYHb1xQxEkqaOBqQIoGmxVquJYLSoLbuB6xHFFVGKkLO",
+      "characterSheet": {
+        "nom": "Vargros",
+        "race": "humain",
+        "classe": "mercenaire",
+        "age": 35,
+        "corps": 12,
+        "corps-sous-comp": {
+          "combatMelee": 12
+        }
+      }
+    },
+    {
+      "username": "eowyn",
+      "passwordHash": "$2b$10$7d/aptcZ00EQ5NZVkaOUM.MRIjPcnf0m7AimMgLeUJTBvUwRCmWKO",
+      "characterSheet": {
+        "nom": "Eowyn",
+        "race": "elfe",
+        "classe": "archer",
+        "age": 53,
+        "corps": 8,
+        "corps-sous-comp": {
+          "combatDistance": 12
+        }
+      }
+    },
+    {}
+  ]
+}
