@@ -6,9 +6,14 @@ const bcrypt = require("bcrypt");
 const accountsPath = path.join(__dirname, "../../data/accounts.json");
 
 const questions = [
-  { key: "username", question: "🧑 Quel est ton **nom d'utilisateur** ?" },
-  { key: "password", question: "🔒 Choisis un **mot de passe**." },
-  { key: "nom", question: "📛 Quel est le **nom de ton personnage** ?" },
+  { key: "username", question: "🧑 Quel sera **nom d'utilisateur** ?" },
+  {
+    key: "password",
+    question:
+      "🔒 Choisis un **mot de passe**. (préférablement le même que le nom d'utilisateur)",
+  },
+  { key: "nom", question: "Quel est le **nom du personnage** ?" },
+  { key: "prenom", question: "Quel est le **prenom du du personnage** ?" },
   { key: "race", question: "👤 Quelle est sa **race** ?" },
   { key: "classe", question: "⚔️ Quelle est sa **classe** ?" },
   { key: "age", question: "📅 Quel est son **âge** ?" },
@@ -27,10 +32,6 @@ const sousCompetenceQuestions = [
   {
     key: "corps-sous-comp::sang froid",
     question: "🔹 Valeur pour **corps – Sang froid** ?",
-  },
-  {
-    key: "corps-sous-comp::resistance",
-    question: "🔹 Valeur pour **corps – Resistance** ?",
   },
   {
     key: "corps-sous-comp::robustesse",
@@ -59,10 +60,6 @@ const sousCompetenceQuestions = [
     question: "🔹 Valeur pour **intellect – Intuition** ?",
   },
   {
-    key: "intellect-sous-comp::stratégie",
-    question: "🔹 Valeur pour **intellect – Stratégie** ?",
-  },
-  {
     key: "intellect-sous-comp::navigation",
     question: "🔹 Valeur pour **intellect – Navigation** ?",
   },
@@ -72,7 +69,7 @@ const sousCompetenceQuestions = [
   },
   {
     key: "intellect-sous-comp::craft",
-    question: "🔹 Valeur pour **intellect – Craft** ?",
+    question: "🔹 Valeur pour **intellect – Craft et survie** ?",
   },
   {
     key: "intellect-sous-comp::alchimie",
@@ -148,7 +145,7 @@ const sousCompetenceQuestions = [
   },
   {
     key: "sociale-sous-comp::animaux",
-    question: "🔹 Valeur pour **sociale – Animaux** ?",
+    question: "🔹 Valeur pour **sociale – Anthropos** ?",
   },
   {
     key: "sociale-sous-comp::médical",

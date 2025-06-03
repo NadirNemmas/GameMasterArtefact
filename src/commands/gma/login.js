@@ -2,7 +2,7 @@ const { SlashCommandSubcommandBuilder } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
-const { login } = require("../../session.js");
+const { login, getUsername } = require("../../session.js");
 
 const accountsPath = path.join(__dirname, "../../data/accounts.json");
 
@@ -21,6 +21,16 @@ module.exports = {
     console.log("gma login command executed");
     const username = interaction.options.getString("username");
 
+    // ✅ Vérifie si déjà connecté
+    const currentUser = getUsername(interaction.user.id);
+    if (currentUser) {
+      return interaction.reply({
+        content: `🔐 Vous êtes déjà connecté en tant que **${currentUser}**.`,
+        ephemeral: true,
+      });
+    }
+
+    // ✅ Lecture des comptes
     let rawData;
     try {
       rawData = fs.readFileSync(accountsPath, "utf8");
@@ -68,7 +78,9 @@ module.exports = {
       );
       if (isMatch) {
         login(interaction.user.id, username);
-        await message.reply(`✅ Bienvenue, ${username}. Vous êtes connecté.`);
+        await message.reply(
+          `✅ Bienvenue, **${username}**. Vous êtes maintenant connecté.`
+        );
       } else {
         await message.reply(`❌ Mot de passe incorrect.`);
       }

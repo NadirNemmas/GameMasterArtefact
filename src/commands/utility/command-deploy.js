@@ -1,10 +1,12 @@
 const { REST, Routes } = require("discord.js");
 const path = require("path");
-const { token, clientId, guildId } = require(path.join(
+const fs = require("fs");
+
+// ✅ Import multiple guild IDs
+const { token, clientId, guildIds } = require(path.join(
   __dirname,
   "../../../config.json"
 ));
-const fs = require("fs");
 
 const commands = [];
 
@@ -30,10 +32,16 @@ const rest = new REST({ version: "10" }).setToken(token);
 (async () => {
   try {
     console.log("⏳ Déploiement des commandes slash...");
-    await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
-      body: commands,
-    });
-    console.log("✅ Commandes enregistrées !");
+
+    // ✅ Déployer pour chaque guilde
+    for (const guildId of guildIds) {
+      if (!guildId) continue;
+      await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+        body: commands,
+      });
+
+      console.log(`✅ Commandes enregistrées sur la guilde ${guildId}`);
+    }
   } catch (error) {
     console.error("❌ Erreur :", error);
   }

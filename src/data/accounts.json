@@ -1,30 +1,118 @@
 {
   "users": [
     {
+      "username": "mj",
+      "passwordHash": "$2b$10$FKmcEWDjANSERlxbQJ5LTuJrnBde9faIkOzY9g0PDJV3y4nD9JGZm",
+      "role": "maitre de jeu",
+      "isAdmin": true
+    },
+    {
       "username": "vargros",
       "passwordHash": "$2b$10$DpYBHt3FEcYHb1xQxEkqaOBqQIoGmxVquJYLSoLbuB6xHFFVGKkLO",
+      "role": "maitre de jeu",
+      "isAdmin": false,
       "characterSheet": {
-        "nom": "Vargros",
-        "race": "humain",
+        "nom": "Kaelen",
+        "prenom": "Vargros",
+        "race": "Humain",
         "classe": "mercenaire",
         "age": 35,
         "corps": 12,
+        "intellect": 6,
+        "agilité": 12,
+        "sociale": 3,
         "corps-sous-comp": {
-          "combatMelee": 12
+          "intimidation": 12,
+          "sang froid": 10,
+          "combat à distance": 12,
+          "robustesse": 12,
+          "mêlée lourde": 14,
+          "combat main nues": 12,
+          "réflexe": 12
+        },
+        "intellect-sous-comp": {
+          "intuition": 6,
+          "magie": 6,
+          "navigation": 6,
+          "perception": 6,
+          "craft et survie": 6,
+          "alchimie": 6,
+          "mythologie/savoir": 6
+        },
+        "agilité-sous-comp": {
+          "combat à distance léger": 12,
+          "discrétion": 12,
+          "esquive": 12,
+          "dance/mouvements": 12,
+          "escalade": 12,
+          "voler": 12,
+          "mêlée légères": 12,
+          "crochetage": 12
+        },
+        "sociale-sous-comp": {
+          "éloquence/mensonge": 5,
+          "médical": 5,
+          "persuasion": 5,
+          "charisme": 5,
+          "humour": 5,
+          "séduction": 5,
+          "lire/écrire": 5,
+          "Anthropos": 5
         }
       }
     },
     {
       "username": "eowyn",
       "passwordHash": "$2b$10$7d/aptcZ00EQ5NZVkaOUM.MRIjPcnf0m7AimMgLeUJTBvUwRCmWKO",
+      "role": "maitre de jeu",
+      "isAdmin": false,
       "characterSheet": {
         "nom": "Eowyn",
-        "race": "elfe",
-        "classe": "archer",
+        "prenom": "Gilgalad",
+        "race": "Elf des bois",
+        "classe": "Archer",
         "age": 53,
         "corps": 8,
+        "intellect": 8,
+        "agilité": 8,
+        "sociale": 6,
         "corps-sous-comp": {
-          "combatDistance": 12
+          "intimidation": 8,
+          "sang froid": 8,
+          "combat à distance": 12,
+          "robustesse": 8,
+          "mêlée lourde": 8,
+          "combat main nues": 9,
+          "réflexe": 8
+        },
+        "intellect-sous-comp": {
+          "intuition": 8,
+          "magie": 8,
+          "navigation": 8,
+          "perception": 12,
+          "craft et survie": 8,
+          "alchimie": 8,
+          "mythologie/savoir": 8
+        },
+        "agilité-sous-comp": {
+          "combat à distance léger": 10,
+          "discrétion": 10,
+          "esquive": 11,
+          "dance/mouvements": 10,
+          "escalade": 8,
+          "voler": 10,
+          "mêlée légères": 12,
+          "crochetage": 12
+        },
+        "sociale-sous-comp": {
+          "éloquence/mensonge": 6,
+          "médical": 4,
+          "persuasion": 6,
+          "charisme": 8,
+          "humour": 4,
+          "séduction": 8,
+          "lire/écrire": 6,
+          "Anthropos": 4
         }
       }
     },
@@ -32,8 +120,11 @@
     {
       "username": "greg",
       "passwordHash": "$2b$10$Ur.kTBjeUlktl43aLf499.BAW2mB2NwXdNBAJErkWZGfn4cHfWabi",
+      "role": "personnage",
+      "isAdmin": false,
       "characterSheet": {
         "nom": "Greg",
+        "prenom": "Le Grand",
         "race": "Humain",
         "classe": "Voleur",
         "age": 33,

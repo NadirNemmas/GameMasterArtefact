@@ -5,80 +5,152 @@ const session = require("../../session.js");
 
 const accountsPath = path.join(__dirname, "../../data/accounts.json");
 
+function normalize(str) {
+  return str
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/\s+/g, "");
+}
+
 module.exports = {
   data: new SlashCommandSubcommandBuilder()
     .setName("sheet")
-    .setDescription("Montre la fiches de personnage de l'utilisateur connecté"),
+    .setDescription("Affiche une fiche de personnage")
+    .addStringOption((option) =>
+      option
+        .setName("stat")
+        .setDescription("Afficher une statistique ou sous-compétence précise")
+        .setRequired(false)
+    )
+    .addStringOption((option) =>
+      option
+        .setName("stats")
+        .setDescription(
+          "Afficher plusieurs statistiques séparées par des virgules"
+        )
+        .setRequired(false)
+    )
+    .addStringOption((option) =>
+      option
+        .setName("user")
+        .setDescription("Voir la fiche d’un autre joueur (MJ seulement)")
+        .setRequired(false)
+    )
+    .addStringOption((option) =>
+      option
+        .setName("query")
+        .setDescription("Ex: nom_utilisateur:stat ou juste stat")
+        .setRequired(false)
+    ),
 
   async execute(interaction) {
-    console.log("gma sheet command executed");
+    const requesterId = interaction.user.id;
+    const sessionUsername = session.getUsername(requesterId);
 
-    const username = session.getUsername(interaction.user.id);
-    if (!username) {
+    if (!sessionUsername) {
+      return interaction.reply({
+        content: "❌ Vous devez être connecté avec `/gma login`.",
+        ephemeral: true,
+      });
+    }
+
+    const raw = fs.readFileSync(accountsPath, "utf8");
+    const accounts = JSON.parse(raw).users;
+
+    const viewerAccount = accounts.find((u) => u.username === sessionUsername);
+    const isAdmin = viewerAccount?.isAdmin === true;
+
+    const stat = interaction.options.getString("stat");
+    const statsList = interaction.options.getString("stats");
+    const query = interaction.options.getString("query");
+    let targetUsername =
+      interaction.options.getString("user") || sessionUsername;
+    let statFromQuery = null;
+
+    if (query) {
+      const parts = query.split(":");
+      if (parts.length === 2) {
+        targetUsername = parts[0];
+        statFromQuery = parts[1];
+      } else {
+        statFromQuery = parts[0];
+      }
+    }
+
+    if (targetUsername !== sessionUsername && !isAdmin) {
       return interaction.reply({
         content:
-          "❌ Vous devez être connecté à un compte avec `/gma login <username>`.",
+          "❌ Seuls les MJ peuvent consulter la fiche d'un autre joueur.",
         ephemeral: true,
       });
     }
 
-    let rawData;
-    try {
-      rawData = fs.readFileSync(accountsPath, "utf8");
-    } catch (err) {
+    const target = accounts.find((u) => u.username === targetUsername);
+
+    if (!target || !target.characterSheet) {
       return interaction.reply({
-        content: "❌ Impossible de lire le fichier des comptes.",
+        content: `❌ Fiche pour \`${targetUsername}\` introuvable.`,
         ephemeral: true,
       });
     }
 
-    let accounts;
-    try {
-      accounts = JSON.parse(rawData).users;
-    } catch (err) {
-      return interaction.reply({
-        content: "❌ Erreur lors de la lecture des données JSON.",
-        ephemeral: true,
-      });
-    }
+    const sheet = target.characterSheet;
+    const allStats = ["corps", "intellect", "agilité", "sociale"];
 
-    const userAccount = accounts.find((u) => u.username === username);
-    if (!userAccount) {
-      return interaction.reply({
-        content: `❌ Compte "${username}" introuvable.`,
-        ephemeral: true,
-      });
-    }
-
-    let characterSheets = userAccount.characterSheet;
-
-    if (!characterSheets) {
-      return interaction.reply({
-        content: `❌ Aucun personnage trouvé pour l'utilisateur ${username}.`,
-        ephemeral: true,
-      });
-    }
-    if (!Array.isArray(characterSheets)) {
-      characterSheets = [characterSheets];
-    }
-
-    let response = `📜 **Fiche${
-      characterSheets.length > 1 ? "s" : ""
-    } de personnage pour \`${username}\` :**\n`;
-
-    characterSheets.forEach((sheet) => {
-      response += `- Nom : ${sheet.nom}\n`;
-      response += `- Race : ${sheet.race}\n`;
-      response += `- Classe : ${sheet.classe}\n`;
-      response += `- Age : ${sheet.age}\n`;
-      response += `- Stat-Corps : ${sheet.corps}\n`;
-      if (sheet.stats) {
-        Object.entries(sheet.stats).forEach(([stat, value]) => {
-          response += `- ${stat} : ${value}\n`;
-        });
+    function resolveStat(statQuery) {
+      const normStat = normalize(statQuery);
+      for (const domaine of allStats) {
+        const sous = sheet[`${domaine}-sous-comp`] || {};
+        for (const [key, val] of Object.entries(sous)) {
+          if (normalize(key) === normStat) {
+            return `- ${key} (${domaine}) : ${val}`;
+          }
+        }
+        if (normalize(domaine) === normStat && sheet[domaine] !== undefined) {
+          return `- ${domaine} : ${sheet[domaine]}`;
+        }
       }
-    });
+      return null;
+    }
 
-    return interaction.reply({ content: response, ephemeral: true });
+    if (stat || statFromQuery) {
+      const queryStat = statFromQuery || stat;
+      const result = resolveStat(queryStat);
+      return interaction.reply({
+        content: result || `❌ Statistique \`${queryStat}\` non trouvée.`,
+        ephemeral: !result,
+      });
+    }
+
+    if (statsList) {
+      const queries = statsList.split(",").map((s) => normalize(s.trim()));
+      const found = [];
+
+      for (const query of queries) {
+        const result = resolveStat(query);
+        found.push(result || `❌ ${query} : non trouvée`);
+      }
+
+      return interaction.reply({
+        content: found.join("\n"),
+        ephemeral: false,
+      });
+    }
+
+    // Fiche complète
+    let response = `📜 **Fiche de \`${targetUsername}\`**\n`;
+    for (const domaine of allStats) {
+      response += `\n**${domaine.toUpperCase()}** : ${sheet[domaine]}\n`;
+      const sous = sheet[`${domaine}-sous-comp`] || {};
+      for (const [key, val] of Object.entries(sous)) {
+        response += `  • ${key} : ${val}\n`;
+      }
+    }
+
+    return interaction.reply({
+      content: response,
+      ephemeral: false,
+    });
   },
 };
