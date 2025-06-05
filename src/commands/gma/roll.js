@@ -28,7 +28,7 @@ module.exports = {
     )
     .addIntegerOption((option) =>
       option
-        .setName("x")
+        .setName("d")
         .setDescription("Nombre de faces du dé (ex: 6, 20, 100...)")
         .setRequired(false)
     )
